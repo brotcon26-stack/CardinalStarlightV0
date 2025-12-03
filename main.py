@@ -17,7 +17,7 @@ import LED
 import Servo
 from machine import Pin, PWM
 
-GroundTest = False #sets whether to ground test or not. If true, this replaces real data with replayed data from a file
+GroundTest = True #sets whether to ground test or not. If true, this replaces real data with replayed data from a file
 Slowmode = False #If we are in ground test mode, this can also be enabled. This delays 10 seconds after each loop and prints some of the data
 slowmodeDelay = 0.5 #Delay time for slowmode in seconds
 
@@ -265,12 +265,12 @@ while True:
         Time = utime.ticks_ms() - LaunchTime #This updates the relative to launch time. This is not the time since startup, but the time since launch
         if GroundTest:
             Time = int(testData[0])
-        dataLog = open(dataTitle,"a")
         FrameData = str(Time)+","+str(Altitude)+","+str(RawAltitude)+","+str(pressure)+","+str(temperature)+","+str(IMUData)+","+str(MaxAltitude)+","+str(ApogeeCounter)+","+str(Event)+","+str(errorLog)+"\n"
         FrameData = FrameData.replace("(","")
         FrameData = FrameData.replace(")","")
-        dataLog.write(FrameData)
-        dataLog.close()
+        with open(dataTitle, 'a') as dataLog:
+            dataLog.write(FrameData)
+        
       
     #Here are some test bits for orientation measurment (very questionable)
     #frameTime = Time - prevTime
