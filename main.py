@@ -17,7 +17,7 @@ import LED
 import Servo
 from machine import Pin, PWM
 
-GroundTest = True #sets whether to ground test or not. If true, this replaces real data with replayed data from a file
+GroundTest = False #sets whether to ground test or not. If true, this replaces real data with replayed data from a file
 Slowmode = False #If we are in ground test mode, this can also be enabled. This delays 10 seconds after each loop and prints some of the data
 slowmodeDelay = 0.5 #Delay time for slowmode in seconds
 
@@ -104,6 +104,7 @@ BurnoutTime = -1
 ApogeeTime = -1
 LandingTime = -1
 TrueTimeoutTime = -1
+TrueTimeout2Time = -1
 DescentTriggerTime = -1
 
 #This code takes a number of readings of the current altitude and then averages them
@@ -134,12 +135,12 @@ if GroundTest:
 #We do this before the datalog file so we can move the servo without creating a file
 print("Insert Breakwire Jumper")
 while Breakwire.value() == 1:
-    time.sleep_ms(100)
+    utime.sleep_ms(100)
     if GroundTest:
         print("Ground Test Mode")
         break
     
-time.sleep(2)
+utime.sleep_ms(200)
 
 #This is some code to update the counter to create a new file for each flight
 
