@@ -17,6 +17,8 @@ import LED
 import Servo
 from machine import Pin, PWM
 
+import hardwareFunctions
+
 GroundTest = False #sets whether to ground test or not. If true, this replaces real data with replayed data from a file
 Slowmode = False #If we are in ground test mode, this can also be enabled. This delays 10 seconds after each loop and prints some of the data
 slowmodeDelay = 0.5 #Delay time for slowmode in seconds
@@ -25,8 +27,8 @@ def getAltitude(pressure):
     return (145366.45 * (1.0 - pow(pressure / 1013.25, 0.190284))) # returns altitude in feet
 #C 16 this was not working in the modified original design
 
-#Start i2c communications 
-i2c = machine.I2C(1, scl=machine.Pin(3), sda=machine.Pin(2), freq=100000) #C 285
+i2c, whiteLED, IMU, baro, Breakwire, GroundTest = hardwareFunctions.initHardware()
+
 
 #Servo positions - These are the PWM signals to set each servo to it's open or closed position
 XOpen = 7000
@@ -46,35 +48,6 @@ servoY = Servo.Servo(12, YOpen, YClosed)
 servoX.Close()
 servoY.Close()
 
-#Led Pin - this is the white LED used to indicate board state
-whiteLED = LED.LED(24) #This creates and LED object on pin 24 (using a custom class)
-whiteLED.OFF() #Turns said LED off
-
-#Setup the Gyroscope/IMU
-IMU = starlight.ICM42605(i2c, 0x68) #C 287 Creats the IMU object
-IMU.config_gyro() #C 288 Sets up the IMU
-IMU.enable() #C 289 enables the IMU
-IMU.get_bias() #C 332 Calibrates the IMU
-print("IMU Calibrated")
-
-#Setup the Barometer/Altitude Sensor
-baro = starlight.BMP388(i2c, 0x76) #C 291 Creates the altimeter object
-baro.enable_temp_and_pressure() #C 292 Enables the sensors
-baro.calibrate() #C 293 Calibrates the altimeter
-print("Barometer Calibrated")
-
-#Enable the Level Shifter - this allows the 3.3V RP2040 to talk to the 5V servos
-#I'm not totally sure this is necessary, but better safe than sorry
-LevelShifter = Pin(14,Pin.OUT)
-LevelShifter.value(1)
-
-#Detection pin for breakwire
-Breakwire = Pin(1, Pin.IN, Pin.PULL_UP)
-
-#Test pin --> used for groundtesting when not plugged in to a PC
-testPin = Pin(0 , Pin.IN, Pin.PULL_UP)
-if testPin.value() == 0:
-    GroundTest = True
 
 #define and zero our variables for datalogging
 pressure = 0 #Current Pressure
