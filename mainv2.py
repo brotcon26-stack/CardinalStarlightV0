@@ -1,22 +1,31 @@
 #This main file is a rough pseudoish code of the v2 main file, I would like the final version to be this simple
 #but we will see
-import imports.py
+#from imported import importDepend
+#importDepend('SITL')
+
+import sitlInit as init
+import sitlSensors as sensors
+import logging
+import baroFun
+import time
+import SITL
 
 i2c = init.i2c()
 IMU = init.IMU()
 baro= init.baro()
 breakwire = init.breakwire()
 
-groundAlt = calibrateGroundAlt(baro)
+groundAlt = baroFun.calibrateGroundAlt(baro, 10)
+previousAlt = groundAlt
+eventTitle, dataTitle = logging.getTitles()
+logging.createFiles(eventTitle, dataTitle)
 
-eventTitle, dataTitle = init.getTitles()
-createFiles(eventTitle, dataTitle)
-
-usbConnected = checkUSBConnection()
+usbConnected = init.checkUSBConnection()
 
 while True:
     pressure, temperature = sensors.getPresTemp(baro)
-    altitude = calculateAltitude(pressure, groundAlt)
-    filtAltitude = filterAltitude(a,altitude)
+    altitude = baroFun.calculateAltitude(pressure, groundAlt)
+    filtAltitude = baroFun.filterAltitude(previousAlt, altitude, 0.4)
+    print(f'Altitude: {filtAltitude} m, Temperature: {temperature} °C Filtered Altitude: {filtAltitude} m')
 
     
