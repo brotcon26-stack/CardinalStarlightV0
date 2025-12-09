@@ -407,5 +407,3 @@ eventLog.close()
 
 whiteLED.OFF()
 print("Finished!")
-
-

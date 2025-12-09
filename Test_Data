@@ -97,13 +97,3 @@ Time (since launch), Filtered Altitude, Unfiltered Altitude, Pressure, Temperatu
 9042,2.816566,3.351425,1018.231,-1,(-0.1669922, -0.0009765625, 1.033691, 10.94047, 8.0975, 13.68922),0
 9133,3.252317,3.905945,1018.21,22.10901,(-0.168457, -0.0009765625, 1.033203, 10.92484, 7.988125, 13.72047),0
 9225,3.728649,4.443146,1018.191,-1,(-0.1699219, 0.0, 1.032715, 10.86234, 8.019375, 13.72047),0
-
-
-
-Max Altitude:84.51424
-Launch Time:446384
-Burnout Time:683
-ApogeeTime:3184
-Landing Time:7219
-Actual Timeout Time: 1840
-Altitude Trigger Time :5776
