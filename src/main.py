@@ -17,8 +17,8 @@ import LED
 import Servo
 from machine import Pin, PWM
 
-GroundTest = False #sets whether to ground test or not. If true, this replaces real data with replayed data from a file
-Slowmode = False #If we are in ground test mode, this can also be enabled. This delays 10 seconds after each loop and prints some of the data
+GroundTest = True #sets whether to ground test or not. If true, this replaces real data with replayed data from a file
+Slowmode = True #If we are in ground test mode, this can also be enabled. This delays 10 seconds after each loop and prints some of the data
 slowmodeDelay = 0.5 #Delay time for slowmode in seconds
 
 def getAltitude(pressure):
