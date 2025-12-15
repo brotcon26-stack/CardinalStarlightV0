@@ -180,7 +180,7 @@ if GroundTest:
 eventLog.write("Timeout Time = "+str(timoutTime)+"\n") 
 eventLog.write("Trigger Altitude = "+str(triggerAltitude)+"\n ") 
 
-dataLog.write("time_launch,filtered_altitude,unfiltered_altitude,pressure,temperature,acceleration_x,acceleration_y,acceleration_z,gyro_x_rate,gyro_y_rate,gyro_z_rate,max_altitude,apogee_counter,event#,error_flag \n") #creates a header for the main body of flight data
+dataLog.write("time_launch_ms,filtered_altitude_ft,unfiltered_altitude_ft,pressure,temperature,acceleration_x_g,acceleration_y_g,acceleration_z_g,gyro_x_rate,gyro_y_rate,gyro_z_rate,max_altitude_ft,apogee_counter,event#,error_flag \n") #creates a header for the main body of flight data
 
 dataLog.close()
 eventLog.close() #These make sure the logs close correctly
