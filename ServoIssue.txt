@@ -1,0 +1,5 @@
+ServoIssue.txt
+Did some more testing with the servos, this seems to have been a problem with the
+Servo itself and not the Starlight board, although it the working servo still moved 
+slow. 
+I also added the event number to the GroundTest slowmode output.
