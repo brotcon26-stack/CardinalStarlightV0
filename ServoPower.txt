@@ -1,0 +1,2 @@
+Discovered that the servo issue was just a lack of power over USB. Testing with the
+flight battery fixed the problem, the servo already on the rocket functioned fine.
