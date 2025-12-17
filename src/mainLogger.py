@@ -1,5 +1,6 @@
-
-
+import utime
+import starlight
+import machine
 
 def getAltitude(pressure):
     return (145366.45 * (1.0 - pow(pressure / 1013.25, 0.190284))) # returns altitude in feet
@@ -51,8 +52,9 @@ except OSError: #If the file doesn't exist, we get an error and do this instead
 #FlightData files log raw data, Event files log settings and events.
 dataTitle = "DataLogger"+str(z)+".csv" #Title for the raw data
 
-dataLog = open(dataTitle,"w") #This creates the datalogging file based on the previous blocks of code - each time this runs, a new file is created
-
+#dataLog = open(dataTitle,"w") #This creates the datalogging file based on the previous blocks of code - each time this runs, a new file is created
+with open(dataTitle,'w') as dataLog:
+    dataLog.write('time,temperature,pressure,altitude')
 while True:
 
     prevPressure = pressure
@@ -69,3 +71,4 @@ while True:
         print('Barometer Error (Negative 1)')
 
     altitude = getAltitude(pressure) - groundAlt
+    dataFrame = f'{utime.ticks_ms()},{temperature},{pressure},{altitude}'
