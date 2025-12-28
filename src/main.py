@@ -11,14 +11,19 @@ from Servo import Servo
 from machine import Pin
 
 #Open and closed positions for the servo
-Open = 7000
-Closed = 3100
+OpenX = 3100
+ClosedX = 7000
 
 def getAltitude(pressure):
     return (145366.45 * (1.0 - pow(pressure / 1013.25, 0.190284))) # returns altitude in feet
 
 #Start i2c communications 
 i2c = machine.I2C(1, scl=machine.Pin(3), sda=machine.Pin(2), freq=100000)
+
+#Enable the Level Shifter - this allows the 3.3V RP2040 to talk to the 5V servos
+#I'm not totally sure this is necessary, but better safe than sorry
+LevelShifter = Pin(14,Pin.OUT)
+LevelShifter.value(1)
 
 #Setup the Barometer/Altitude Sensor
 baro = starlight.BMP388(i2c, 0x76) #C 291 Creates the altimeter object
@@ -32,7 +37,7 @@ whiteLED.OFF()
 #Detection pin for breakwire
 Breakwire = Pin(1, Pin.IN, Pin.PULL_UP)
 
-servo = Servo(11,Open,Closed)
+servo = Servo(11,OpenX,ClosedX)
 
 pressure = 0
 temperature = 0
@@ -79,6 +84,8 @@ with open(dataTitle,'w') as dataLog:
 
 whiteLED.ON() #Turn LED on to signify start of logging
 
+servo.Close()
+
 while True:
 
     prevPressure = pressure
@@ -102,7 +109,9 @@ while True:
 
 
     #Servo Logic
-    if Breakwire.value() == 1:
-        servo.Open()
     if Breakwire.value() == 0:
+        servo.Open()
+    else:
         servo.Close()
+        
+    utime.sleep_ms(50)
