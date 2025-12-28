@@ -33,9 +33,9 @@ for i in range(cycles):
     pressure = baro.getPressure()
     print(pressure)
     groundCalc = groundCalc + getAltitude(pressure)
-    time.sleep(0.1)
+    utime.sleep(0.1)
 groundAlt = groundCalc/cycles
-print("Ground Altitude = "+str(groundAltitude))
+print("Ground Altitude = "+str(groundAlt))
 
 
 
@@ -61,9 +61,11 @@ dataTitle = "DataLogger"+str(z)+".csv" #Title for the raw data
 
 #dataLog = open(dataTitle,"w") #This creates the datalogging file based on the previous blocks of code - each time this runs, a new file is created
 with open(dataTitle,'w') as dataLog:
-    dataLog.write('time,temperature,pressure,altitude')
+    dataLog.write('time,temperature,pressure,altitude,errorLog\n')
 
 whiteLED.ON() #Turn LED on to signify start of logging
+
+errorLog = 0
 
 while True:
 
@@ -81,4 +83,7 @@ while True:
         print('Barometer Error (Negative 1)')
 
     altitude = getAltitude(pressure) - groundAlt
-    dataFrame = f'{utime.ticks_ms()},{temperature},{pressure},{altitude}'
+    dataFrame = f'{utime.ticks_ms()},{temperature},{pressure},{altitude},{errorLog}\n'
+
+    with open(dataTitle,'a') as dataLog:
+        dataLog.write(dataFrame)
