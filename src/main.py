@@ -1,10 +1,18 @@
 #Data Logging only file for Starlight. Useful for drop tests or other applications
 #Flight computer performs no actions, only passively logs data from startup until shutdown
 
+#This version also has a servo that moves when breakwire is pulled
+
 import utime
 import starlight
 import machine
 import LED
+from Servo import Servo
+from machine import Pin
+
+#Open and closed positions for the servo
+Open = 7000
+Closed = 3100
 
 def getAltitude(pressure):
     return (145366.45 * (1.0 - pow(pressure / 1013.25, 0.190284))) # returns altitude in feet
@@ -21,10 +29,16 @@ print("Barometer Calibrated")
 whiteLED = LED.LED(24)
 whiteLED.OFF()
 
+#Detection pin for breakwire
+Breakwire = Pin(1, Pin.IN, Pin.PULL_UP)
+
+servo = Servo(11,Open,Closed)
+
 pressure = 0
 temperature = 0
 groundAlt = 0
 altitude = 0
+errorLog = 0
 
 #This code takes a number of readings of the current altitude and then averages them
 cycles = 10 #A larger number increases the number of samples, which would make this take longer
@@ -65,8 +79,6 @@ with open(dataTitle,'w') as dataLog:
 
 whiteLED.ON() #Turn LED on to signify start of logging
 
-errorLog = 0
-
 while True:
 
     prevPressure = pressure
@@ -87,3 +99,10 @@ while True:
 
     with open(dataTitle,'a') as dataLog:
         dataLog.write(dataFrame)
+
+
+    #Servo Logic
+    if Breakwire.value() == 1:
+        servo.Open()
+    if Breakwire.value() == 0:
+        servo.Close()
