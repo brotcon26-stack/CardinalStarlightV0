@@ -32,8 +32,8 @@ i2c = machine.I2C(1, scl=machine.Pin(3), sda=machine.Pin(2), freq=100000) #C 285
 XOpen = 7000
 XClosed = 3100
 
-YOpen = 3100
-YClosed = 7000
+YOpen = 7000
+YClosed = 3100
 
 #Setting up the servos using my custom servo class
 #Servo Setup - We setup two servos, one on the X TVC channel and one on Y.
@@ -119,7 +119,7 @@ groundAltitude = groundCalc/cycles
 print("Ground Altitude = "+str(groundAltitude))
 
 #Event settings - timout and triggerAltitude can be set, so we set them here
-timoutTime = 675 #Saved in milliseconds
+timoutTime = 500 #Saved in milliseconds
 
 timout2Time = 1500
 
@@ -258,8 +258,8 @@ while True:
     
     #Servo Triggers - this allows the trigger we use for servos to be easily changed here
     #These can be set to any of the events listed above
-    ServoX_Trigger = Apogee
-    ServoY_Trigger = Timeout
+    ServoX_Trigger = Apogee #Parachute
+    ServoY_Trigger = Timeout #Staging
 
     #Datalogging - we only do this while in flight
     if Launched:
