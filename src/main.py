@@ -11,9 +11,11 @@ from Servo import Servo
 from machine import Pin
 
 #Open and closed positions for the servo
-OpenX = 3100
-ClosedX = 7000
+OpenX = 7000
+ClosedX = 3100
 
+OpenY = 7000
+ClosedY = 3100
 def getAltitude(pressure):
     return (145366.45 * (1.0 - pow(pressure / 1013.25, 0.190284))) # returns altitude in feet
 
@@ -37,7 +39,8 @@ whiteLED.OFF()
 #Detection pin for breakwire
 Breakwire = Pin(1, Pin.IN, Pin.PULL_UP)
 
-servo = Servo(11,OpenX,ClosedX)
+servoX = Servo(11,OpenX,ClosedX)
+servoY = Servo(12,OpenY,ClosedY)
 
 pressure = 0
 temperature = 0
@@ -82,9 +85,15 @@ dataTitle = "DataLogger"+str(z)+".csv" #Title for the raw data
 with open(dataTitle,'w') as dataLog:
     dataLog.write('time,temperature,pressure,altitude,errorLog\n')
 
+servoX.Close()
+servoY.Close()
+
+while Breakwire.value() == 1:
+    utime.sleep_ms(50)
+utime.sleep_ms(500)
 whiteLED.ON() #Turn LED on to signify start of logging
 
-servo.Close()
+
 
 while True:
 
@@ -109,9 +118,12 @@ while True:
 
 
     #Servo Logic
-    if Breakwire.value() == 0:
-        servo.Open()
-    else:
-        servo.Close()
+    if Breakwire.value() == 1:
+        utime.sleep_ms(1000)
+        servoY.Open()
+        utime.sleep_ms(50)
+        servoX.Open()
+        
+    
         
     utime.sleep_ms(50)
