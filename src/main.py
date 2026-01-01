@@ -29,8 +29,8 @@ def getAltitude(pressure):
 i2c = machine.I2C(1, scl=machine.Pin(3), sda=machine.Pin(2), freq=100000) #C 285
 
 #Servo positions - These are the PWM signals to set each servo to it's open or closed position
-XOpen = 7000
-XClosed = 3100
+XOpen = 3100
+XClosed = 7000
 
 YOpen = 7000
 YClosed = 3100
