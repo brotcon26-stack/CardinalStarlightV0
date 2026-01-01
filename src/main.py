@@ -284,6 +284,7 @@ while True:
         print("Filtered Altitude: "+str(Altitude))
         print("Vertical Acceleration: "+str(VertAccel))
         print(f'Apogee Counter: {ApogeeCounter}')
+        print(f'ServoX: {ServoX_Trigger},ServoY: {ServoY_Trigger}')
         #print("Roll Orientation: "+str(OriY))
         utime.sleep(slowmodeDelay)
         
