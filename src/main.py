@@ -180,7 +180,7 @@ if GroundTest:
 eventLog.write("Timeout Time = "+str(timoutTime)+"\n") 
 eventLog.write("Trigger Altitude = "+str(triggerAltitude)+"\n ") 
 
-dataLog.write("time_launch,filtered_altitude,unfiltered_altitude,pressure,temperature,acceleration_x,acceleration_y,acceleration_z,gyro_x_rate,gyro_y_rate,gyro_z_rate,max_altitude,apogee_counter,event#,error_flag \n") #creates a header for the main body of flight data
+dataLog.write("time_launch_ms,filtered_altitude_ft,unfiltered_altitude_ft,pressure,temperature,acceleration_x_g,acceleration_y_g,acceleration_z_g,gyro_x_rate,gyro_y_rate,gyro_z_rate,max_altitude_ft,apogee_counter,event#,servo_x_state,servo_y_state,error_flag \n") #creates a header for the main body of flight data
 
 dataLog.close()
 eventLog.close() #These make sure the logs close correctly
@@ -266,7 +266,7 @@ while True:
         Time = utime.ticks_ms() - LaunchTime #This updates the relative to launch time. This is not the time since startup, but the time since launch
         if GroundTest:
             Time = int(testData[0])
-        FrameData = str(Time)+","+str(Altitude)+","+str(RawAltitude)+","+str(pressure)+","+str(temperature)+","+str(IMUData)+","+str(MaxAltitude)+","+str(ApogeeCounter)+","+str(Event)+","+str(errorLog)+"\n"
+        FrameData = str(Time)+","+str(Altitude)+","+str(RawAltitude)+","+str(pressure)+","+str(temperature)+","+str(IMUData)+","+str(MaxAltitude)+","+str(ApogeeCounter)+","+str(Event)+","+str(ServoX_Trigger)+","+str(ServoY_Trigger)+","+str(errorLog)+"\n"
         FrameData = FrameData.replace("(","")
         FrameData = FrameData.replace(")","")
         with open(dataTitle, 'a') as dataLog:
@@ -284,6 +284,8 @@ while True:
         print("Filtered Altitude: "+str(Altitude))
         print("Vertical Acceleration: "+str(VertAccel))
         print(f'Apogee Counter: {ApogeeCounter}')
+        print(f'Servo X: {ServoX_Trigger}')
+        print(f'Servo Y: {ServoY_Trigger}')
         #print("Roll Orientation: "+str(OriY))
         utime.sleep(slowmodeDelay)
         
