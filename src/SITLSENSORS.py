@@ -1,16 +1,17 @@
-from SITL import readSITLData
+import SITL
 
 class barometer:
-    def __init__():
-        SITLGenerator = readSITLData('Test_Data')
+    def __init__(self):
+        testGenerator = SITL.readSITLData('Test_Data')
 
-    def getPressure():
-            testData = next(SITLGenerator)
+    def getPressure(self):
+            testData = next(testGenerator)
             return testData[3]
+
 def main():
     baro = barometer()
     for i in range (0,50):
         print(baro.getPressure)
 
 if __name__ == '__main__':
-     main()
+    main()
