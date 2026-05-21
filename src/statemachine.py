@@ -22,7 +22,7 @@ class stateMachine:
 
     def update(self,altitude,breakwire):
         
-        if self.state == State.IDLE and breakwire == 1:
+        if self.state == State.IDLE and breakwire == True:
             self.state = State.ASCENT
             #Should add a way to get launch time, either here or in main file
 
@@ -31,7 +31,7 @@ class stateMachine:
             self.apogeeCounter = 0
         
         elif self.state == State.ASCENT:
-            self.apgoeeCounter += 1
+            self.apogeeCounter += 1
 
         if self.state == State.ASCENT and self.apogeeCounter == self.apogeeThreshold and altitude > self.lockoutAlt:
             self.state = State.DESCENT
@@ -40,46 +40,19 @@ class stateMachine:
             self.state = State.LANDED
 
     def getState(self):
-        return self.state
-        
-
-
-
-
-#if not Launched and VertAccel > 1.5:  #Use this line for ground testing
-    if not Launched and Breakwire.value() == 1: #Use this line for actual flights
-        Launched = True
-        LaunchTime = utime.ticks_ms() #Launch Time is saved relative to startup, whereas all other times are relative to launch
-        Event = 1 #1 means in flight
-        print("Launched!")
-        whiteLED.ON()
-        
-    #Burnout is detected when vertical acceleration is close to zero
-    if Launched and not Burnout and VertAccel < 0.2:
-        Burnout = True
-        BurnoutTime = Time #Every event has a time logged, this should help with post flight analysis
-        Event = 2 # Event 2 is unpowered coast
-        print("Burnout!")
+        return self.state   
     
-    #Max Altitude function. If our current altitude is higher than max altitude, it is the maximum
-    if Altitude > MaxAltitude:
-        MaxAltitude = Altitude
-        ApogeeCounter = 0 #This is used for apogee detection. If we are still ascending, this should be zero
-        
-    #Apogee Detection - If we are descending a number of times, we detect apogee
-    ApogeeThreshold = 5
-    if Launched and not Apogee and Altitude < MaxAltitude: #This means we have descended since last reading (and have not yet hit apogee)
-        ApogeeCounter +=1 #If we fell, we add 1 to the counter
-    if not Apogee and ApogeeCounter == ApogeeThreshold and Altitude > triggerAltitude + 5: #This is how we detect apogee.
-        #We must have descended for a certain number of frames (apogee threshold) and be above the triggerAltitude (This prevents early chute deployments)
-        Apogee = True
-        ApogeeTime = Time
-        Event = 3 # Event # 3 is past apogee, descending
-        print("Apogee!")
-    
-    #Landing detect - if we have reached apogee and are under 10 feet, we can assume we have landed
-    if Launched and Apogee and not Landed and Altitude < 10:
-        Landed = True
-        LandingTime = Time
-        Event = 4 # Event 4 means on the ground
-        print("Landed!")
+def main():
+    sm = stateMachine(5,10)
+    print(sm.getState())
+    sm.update(0,True)
+    print(sm.getState())
+    for alt in range(0,50):
+        sm.update(alt,True)
+        print(alt)
+        print(sm.getState())
+    for alt in range(50,-1,-1):
+        sm.update(alt,True)
+        print(sm.getState())
+if __name__ == '__main__':
+    main()
