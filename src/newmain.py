@@ -8,10 +8,12 @@ slowModeDelay = 0.5
 if groundTest:
     import SITLSENSORS as sensors
     import SITLSERVOS as Servo
+    from SITLMACHINE import Pin
 
 else:
     import Servo
     import LED
+    from machine import Pin
 
 def getAltitude(pressure):
     return (145366.45 * (1.0 - pow(pressure / 1013.25, 0.190284))) # returns altitude in feet
@@ -37,14 +39,20 @@ servoY.Close()
 
 
 #Detection pin for breakwire
-Breakwire = Pin(1, Pin.IN, Pin.PULL_UP)
+#Breakwire = Pin(1, Pin.IN, Pin.PULL_UP)
 
 #Test pin --> used for groundtesting when not plugged in to a PC
-testPin = Pin(0 , Pin.IN, Pin.PULL_UP)
-if testPin.value() == 0:
-    groundTest = True
+#testPin = Pin(0 , Pin.IN, Pin.PULL_UP)
+#if testPin.value() == 0:
+#    groundTest = True
 
 
 
 
 baro = sensors.barometer()
+
+while True:
+    pressure = baro.getPressure()
+    print(pressure)
+    print(getAltitude(pressure))
+    time.sleep(1)

@@ -6,7 +6,7 @@ class barometer:
 
     def getPressure(self):
             testData = next(self.testGenerator)
-            return testData[3]
+            return float(testData[3])
 
 def main():
     baro = barometer()
