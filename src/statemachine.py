@@ -17,6 +17,9 @@ class stateMachine:
        self.apogeeThreshold = apogeeThreshold
        self.lockoutAlt = lockoutAlt
 
+       self.apogeeCounter = 0
+       self.maxAltitude = 0
+
     def update(self,altitude,breakwire):
         
         if self.state == State.IDLE and breakwire == 1:
@@ -28,13 +31,13 @@ class stateMachine:
             self.apogeeCounter = 0
         
         elif self.state == State.ASCENT:
-            self.apgeeCounter += 1
+            self.apgoeeCounter += 1
 
         if self.state == State.ASCENT and self.apogeeCounter == self.apogeeThreshold and altitude > self.lockoutAlt:
-            self.state == State.DESCENT
+            self.state = State.DESCENT
 
         if self.state == State.DESCENT and altitude < 10:
-            self.state == State.LANDED
+            self.state = State.LANDED
 
     def getState(self):
         return self.state
