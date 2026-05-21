@@ -278,6 +278,7 @@ while True:
     #error
     #OriY = OriYRate*frameTime
     
+    #Slowmode -> if ground testing, we can add a delay and print data in the loops
     if Launched and GroundTest and Slowmode:
         print("\n")
         print("Unfiltered Altitude: "+str(RawAltitude))
@@ -290,7 +291,7 @@ while True:
         utime.sleep(slowmodeDelay)
         
     
-    
+    #This allows us to trigger launches without the breakwire
     if GroundTest and not Launched and usbConnected:
         input("Hit Enter To Launch: ")
         Launched = True
