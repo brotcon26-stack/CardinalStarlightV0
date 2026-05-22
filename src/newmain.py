@@ -70,6 +70,7 @@ eventLog.writeLine(f'GroundAltitude={groundAlt}')
 #---------------------------------------------------------
 #---------------------------------------------------------
 breakwireState = True #TO_DO: Implement actual breakwire reading. should be set to boolean
+
 while True:
     pressure = baro.getPressure()
     rawAltitude_ft = getAltitude(pressure)
@@ -80,3 +81,5 @@ while True:
     dataLog.writeLine(dataLine)
     print(dataLine)
     time.sleep(1)
+
+    if sm.getState() == servoXTrigger
