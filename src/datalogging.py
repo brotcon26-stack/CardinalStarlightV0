@@ -21,10 +21,7 @@ class logFile:
             title+='****GroundTest****.csv'
         self.title = title
         with open(title,'w') as file:
-            if groundTest:
-                file.write("----GROUND TEST MODE----\n")
-            else:
-                pass
+            pass
     
     def writeLine(self,string):
         with open(self.title,'a') as file:
@@ -32,7 +29,7 @@ class logFile:
 
 def main():
     z = incrementLogNumber()
-    title = f'testfile{z}'
+    title = f'testfile.csv{z}'
     file = logFile(title,True)
     file.writeLine('fish are very cool')
     file.writeLine('really they are')
