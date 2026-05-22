@@ -29,9 +29,10 @@ class logFile:
 
 def main():
     z = incrementLogNumber()
-    title = f'testfile.csv{z}'
+    title = f'testfile{z}.csv'
     file = logFile(title,True)
     file.writeLine('fish are very cool')
     file.writeLine('really they are')
 
-main()
+if __name__ == '__main__':
+    main()

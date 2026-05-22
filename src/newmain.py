@@ -1,6 +1,7 @@
 import statemachine
 import time
 import datalogging
+from miscfunctions import getAltitude, calcGroundAlt
 
 groundTest = True
 slowMode = False
@@ -15,9 +16,6 @@ else:
     import Servo
     import LED
     from machine import Pin
-
-def getAltitude(pressure):
-    return (145366.45 * (1.0 - pow(pressure / 1013.25, 0.190284))) # returns altitude in feet
 
 
 #Servo positions - These are the PWM signals to set each servo to it's open or closed position
@@ -62,18 +60,23 @@ eventLog = datalogging.logFile(eventTitle,groundTest)
 if groundTest:
     eventLog.writeLine("----GROUND TEST MODE----\n") #if we are in ground test mode, I want it to be clear
 
-dataLog.writeLine("pressure,raw_altitude") #creates a header for the main body of flight data
+dataLog.writeLine("pressure,raw_altitude,state") #creates a header for the main body of flight data
 
 baro = sensors.barometer()
 sm = statemachine.stateMachine(5,10)
 
+groundAlt = calcGroundAlt(10,baro)
+eventLog.writeLine(f'GroundAltitude={groundAlt}')
 #---------------------------------------------------------
 #---------------------------------------------------------
 breakwireState = True #TO_DO: Implement actual breakwire reading. should be set to boolean
 while True:
     pressure = baro.getPressure()
     rawAltitude_ft = getAltitude(pressure)
+    rawAltitude_ft -= groundAlt
     sm.update(rawAltitude_ft,breakwireState)
 
-    dataLog.writeLine(f'{pressure},{rawAltitude_ft}')
-
+    dataLine = f'{pressure},{rawAltitude_ft},{sm.getState()},{sm.apogeeCounter}'
+    dataLog.writeLine(dataLine)
+    print(dataLine)
+    time.sleep(1)
