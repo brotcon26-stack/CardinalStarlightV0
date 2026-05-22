@@ -69,16 +69,18 @@ while True:
 
     dataLine = f'{pressure},{rawAltitude_ft},{sm.getState()},{sm.apogeeCounter},{servoXStatus}'
     dataLog.writeLine(dataLine)
-    print(dataLine)
-    time.sleep(1)
-
-    if sm.getState() == servoXTrigger and servoXStatus == False:
+    
+    if slowMode:
+        print(dataLine)
+        time.sleep(slowModeDelay)
+    
+    if sm.getState() == servoXTrigger:
         servoXStatus = True
         servoX.Open()
-    else:
+    elif servoXStatus == False:
         servoX.Close()
 
-    if sm.getState == State.LANDED and breakwireState == False:
+    if sm.getState() == State.LANDED and brkwire.getStatus() == False:
         break
 
 eventLog.writeLine(f'MaximumAltitude={sm.maxAltitude}')
