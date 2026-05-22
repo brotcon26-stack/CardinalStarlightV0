@@ -30,3 +30,11 @@ class logFile:
         with open(self.title,'a') as file:
             file.write(f'{string}\n')
 
+def main():
+    z = incrementLogNumber()
+    title = f'testfile{z}'
+    file = logFile(title,True)
+    file.writeLine('fish are very cool')
+    file.writeLine('really they are')
+
+main()
