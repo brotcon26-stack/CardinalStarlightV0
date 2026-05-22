@@ -15,15 +15,12 @@ if groundTest:
 else:
     import Servo
     import LED
-    from machine import Pin
+    from machine import Pin # type: ignore
 
 
 #Servo positions - These are the PWM signals to set each servo to it's open or closed position
 XOpen = 7000
 XClosed = 3100
-
-YOpen = 3100
-YClosed = 7000
 
 #Setting up the servos using my custom servo class
 #Servo Setup - We setup two servos, one on the X TVC channel and one on Y.
@@ -31,12 +28,9 @@ YClosed = 7000
 servoX = Servo.Servo(11,XOpen,XClosed)
 servoXTrigger = State.DESCENT
 servoXStatus = False
-servoY = Servo.Servo(12, YOpen, YClosed)
 
-#Closing both servos
+#Closing the servo
 servoX.Close()
-servoY.Close()
-
 
 #Detection pin for breakwire
 #Breakwire = Pin(1, Pin.IN, Pin.PULL_UP)
@@ -78,7 +72,7 @@ while True:
     rawAltitude_ft -= groundAlt
     sm.update(rawAltitude_ft,breakwireState)
 
-    dataLine = f'{pressure},{rawAltitude_ft},{sm.getState()},{sm.apogeeCounter}{servoXStatus}'
+    dataLine = f'{pressure},{rawAltitude_ft},{sm.getState()},{sm.apogeeCounter},{servoXStatus}'
     dataLog.writeLine(dataLine)
     print(dataLine)
     time.sleep(1)
