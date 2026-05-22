@@ -1,3 +1,4 @@
+#These imports work regardless of being on the actual hardware
 import time
 import datalogging
 from miscfunctions import getAltitude, calcGroundAlt
@@ -7,15 +8,17 @@ groundTest = True
 slowMode = False
 slowModeDelay = 0.5
 
+#These imports are for testing on a PC in CPython
 if groundTest:
     import SITLSENSORS as sensors
     import SITLSERVOS as Servo
-    from SITLMACHINE import Pin
-
+    import SITLBREAKWIRE as breakwire
+    
+#These imports are for testing on the actual board
 else:
     import Servo
     import LED
-    from machine import Pin # type: ignore
+    import breakwire
 
 
 #Servo positions - These are the PWM signals to set each servo to it's open or closed position
@@ -31,14 +34,6 @@ servoXStatus = False
 
 #Closing the servo
 servoX.Close()
-
-#Detection pin for breakwire
-#Breakwire = Pin(1, Pin.IN, Pin.PULL_UP)
-
-#Test pin --> used for groundtesting when not plugged in to a PC
-#testPin = Pin(0 , Pin.IN, Pin.PULL_UP)
-#if testPin.value() == 0:
-#    groundTest = True
 
 z = datalogging.incrementLogNumber()
 
@@ -59,18 +54,18 @@ dataLog.writeLine("pressure,raw_altitude,state,apogee_counter,servo_x_status") #
 
 baro = sensors.barometer()
 sm = stateMachine(5,15)
+brkwire = breakwire.Breakwire(1)
 
 groundAlt = calcGroundAlt(10,baro)
 eventLog.writeLine(f'GroundAltitude={groundAlt}')
 #---------------------------------------------------------
 #---------------------------------------------------------
-breakwireState = True #TO_DO: Implement actual breakwire reading. should be set to boolean
 
 while True:
     pressure = baro.getPressure()
     rawAltitude_ft = getAltitude(pressure)
     rawAltitude_ft -= groundAlt
-    sm.update(rawAltitude_ft,breakwireState)
+    sm.update(rawAltitude_ft,brkwire.getStatus())
 
     dataLine = f'{pressure},{rawAltitude_ft},{sm.getState()},{sm.apogeeCounter},{servoXStatus}'
     dataLog.writeLine(dataLine)
