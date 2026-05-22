@@ -83,3 +83,7 @@ while True:
     else:
         servoX.Close()
 
+    if sm.getState == State.LANDED and breakwireState == False:
+        break
+
+eventLog.writeLine(f'MaximumAltitude={sm.maxAltitude}')
