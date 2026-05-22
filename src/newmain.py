@@ -58,7 +58,7 @@ if groundTest:
 dataLog.writeLine("pressure,raw_altitude,state,apogee_counter,servo_x_status") #creates a header for the main body of flight data
 
 baro = sensors.barometer()
-sm = stateMachine(5,10)
+sm = stateMachine(5,15)
 
 groundAlt = calcGroundAlt(10,baro)
 eventLog.writeLine(f'GroundAltitude={groundAlt}')
