@@ -1,25 +1,4 @@
-
-class fish:
-    def __init__(self,length,mass):
-        self.length = length
-        self.mass = mass
-    
-    def getSize(self):
-        self.size = self.length * self.mass
-
-    def printSize(self):
-        print(self.size)
-
-#Enum to define states
-class State():
-    IDLE = 0
-    ASCENT = 1
-    DESCENT = 2
-    LANDED = 3
-    
-
-
-def datanumber():
+def incrementLogNumber():
     try: #first, we try to open the counter.txt file
         counter = open("counter.txt","r")
         z = int(counter.read()) #here, we read the number in the file
@@ -33,6 +12,21 @@ def datanumber():
         counter.write("1") #write a 1
         counter.close() #close the file
         z = 1 #we know the number is 1, so we don't need to read it
-    print(z)
+    return z
 
-datanumber()
+class logFile:
+    def __init__(self,title,groundTest):
+        if groundTest:
+            title = title[:-4]
+            title+='****GroundTest****.csv'
+        self.title = title
+        with open(title,'w') as file:
+            if groundTest:
+                file.write("----GROUND TEST MODE----\n")
+            else:
+                pass
+    
+    def writeLine(self,string):
+        with open(self.title,'a') as file:
+            file.write(f'{string}\n')
+
