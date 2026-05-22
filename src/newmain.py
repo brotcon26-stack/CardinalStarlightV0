@@ -1,7 +1,7 @@
-import statemachine
 import time
 import datalogging
 from miscfunctions import getAltitude, calcGroundAlt
+from statemachine import State, stateMachine
 
 groundTest = True
 slowMode = False
@@ -29,7 +29,8 @@ YClosed = 7000
 #Servo Setup - We setup two servos, one on the X TVC channel and one on Y.
 #These only move once during flight when triggered for parachute deployment or other tasks
 servoX = Servo.Servo(11,XOpen,XClosed)
-
+servoXTrigger = State.DESCENT
+servoXStatus = False
 servoY = Servo.Servo(12, YOpen, YClosed)
 
 #Closing both servos
@@ -60,10 +61,10 @@ eventLog = datalogging.logFile(eventTitle,groundTest)
 if groundTest:
     eventLog.writeLine("----GROUND TEST MODE----\n") #if we are in ground test mode, I want it to be clear
 
-dataLog.writeLine("pressure,raw_altitude,state") #creates a header for the main body of flight data
+dataLog.writeLine("pressure,raw_altitude,state,apogee_counter,servo_x_status") #creates a header for the main body of flight data
 
 baro = sensors.barometer()
-sm = statemachine.stateMachine(5,10)
+sm = stateMachine(5,10)
 
 groundAlt = calcGroundAlt(10,baro)
 eventLog.writeLine(f'GroundAltitude={groundAlt}')
@@ -77,9 +78,14 @@ while True:
     rawAltitude_ft -= groundAlt
     sm.update(rawAltitude_ft,breakwireState)
 
-    dataLine = f'{pressure},{rawAltitude_ft},{sm.getState()},{sm.apogeeCounter}'
+    dataLine = f'{pressure},{rawAltitude_ft},{sm.getState()},{sm.apogeeCounter}{servoXStatus}'
     dataLog.writeLine(dataLine)
     print(dataLine)
     time.sleep(1)
 
-    if sm.getState() == servoXTrigger
+    if sm.getState() == servoXTrigger and servoXStatus == False:
+        servoXStatus = True
+        servoX.Open()
+    else:
+        servoX.Close()
+
