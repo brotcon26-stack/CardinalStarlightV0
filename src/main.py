@@ -214,7 +214,7 @@ if usbConnected:
 
 def writeEvent(string):
     with open(eventTitle,'a') as eventLog:
-        eventLog.write(string,"\n")
+        eventLog.write(string+"\n")
 
 #Main flight loop
 while True:
@@ -315,6 +315,7 @@ while True:
         BurnoutTime = Time #Every event has a time logged, this should help with post flight analysis
         Event = 2 # Event 2 is unpowered coast
         print("Burnout!")
+        writeEvent(f"{BurnoutTime}: Burnout")
     
     #Max Altitude function. If our current altitude is higher than max altitude, it is the maximum
     if Altitude > MaxAltitude:
