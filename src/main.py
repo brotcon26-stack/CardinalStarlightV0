@@ -17,7 +17,7 @@ import LED
 import Servo
 from machine import Pin, PWM
 
-GroundTest = False #sets whether to ground test or not. If true, this replaces real data with replayed data from a file
+GroundTest = True #sets whether to ground test or not. If true, this replaces real data with replayed data from a file
 Slowmode = False #If we are in ground test mode, this can also be enabled. This delays 10 seconds after each loop and prints some of the data
 slowmodeDelay = 0.5 #Delay time for slowmode in seconds
 
@@ -212,6 +212,10 @@ usbConnected   = (machine.mem32[SIE_STATUS_REG] & (SIE_CONNECTED | SIE_SUSPENDED
 if usbConnected:
     whiteLED.Blink(3,1)
 
+def writeEvent(string):
+    with open(eventTitle,'a') as eventLog:
+        eventLog.write(string,"\n")
+
 #Main flight loop
 while True:
     
@@ -302,6 +306,7 @@ while True:
         LaunchTime = utime.ticks_ms() #Launch Time is saved relative to startup, whereas all other times are relative to launch
         Event = 1 #1 means in flight
         print("Launched!")
+        writeEvent(f"Launch Time = {LaunchTime}")
         whiteLED.ON()
         
     #Burnout is detected when vertical acceleration is close to zero
