@@ -4,15 +4,11 @@ import utime
 import select
 import math
 import starlight
-#import json
 import time
-#import gpio
 import _thread
 import sys
-#import fusion
 import machine
 import SITL
-#from gaslight import SILAltitude, SILAcceleration
 import LED
 import Servo
 from machine import Pin, PWM
