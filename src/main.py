@@ -13,9 +13,9 @@ import LED
 import Servo
 from machine import Pin, PWM
 
-GroundTest = False #sets whether to ground test or not. If true, this replaces real data with replayed data from a file
-Slowmode = False #If we are in ground test mode, this can also be enabled. This delays 10 seconds after each loop and prints some of the data
-slowmodeDelay = 0.5 #Delay time for slowmode in seconds
+GroundTest = True #sets whether to ground test or not. If true, this replaces real data with replayed data from a file
+Slowmode = True #If we are in ground test mode, this can also be enabled. This delays 10 seconds after each loop and prints some of the data
+slowmodeDelay = 0.2 #Delay time for slowmode in seconds
 
 def getAltitude(pressure):
     return (145366.45 * (1.0 - pow(pressure / 1013.25, 0.190284))) # returns altitude in feet
@@ -247,21 +247,13 @@ while True:
             break
         
     
-    #Altitude filter - this smooths the noisy barometer data
-    Altitude = a*RawAltitude + (1-a)*PrevAltitude
-    PrevAltitude = Altitude
-    #Altitude = RawAltitude #Bypass for Altitude Filter
-    
-    #Servo Triggers - this allows the trigger we use for servos to be easily changed here
-    #These can be set to any of the events listed above
-    ServoX_Trigger = Apogee
-    ServoY_Trigger = Timeout
+
 
     #Datalogging - we only do this while in flight
     if Launched:
         Time = utime.ticks_ms() - LaunchTime #This updates the relative to launch time. This is not the time since startup, but the time since launch
-        if GroundTest:
-            Time = int(testData[0])
+        #if GroundTest:
+            #Time = int(testData[0])
         FrameData = str(Time)+","+str(Altitude)+","+str(RawAltitude)+","+str(pressure)+","+str(temperature)+","+str(IMUData)+","+str(MaxAltitude)+","+str(ApogeeCounter)+","+str(Event)+","+str(ServoX_Trigger)+","+str(ServoY_Trigger)+","+str(errorLog)+"\n"
         FrameData = FrameData.replace("(","")
         FrameData = FrameData.replace(")","")
@@ -350,6 +342,16 @@ while True:
         DescentTriggerTime = Time
         print("Descent Trigger Activated")
         
+    #Altitude filter - this smooths the noisy barometer data
+    Altitude = a*RawAltitude + (1-a)*PrevAltitude
+    PrevAltitude = Altitude
+    #Altitude = RawAltitude #Bypass for Altitude Filter
+    
+    #Servo Triggers - this allows the trigger we use for servos to be easily changed here
+    #These can be set to any of the events listed above
+    ServoX_Trigger = Apogee
+    ServoY_Trigger = Timeout
+
     #Servo Checks - this checks if the servo trigger is true and moves the servo to the relevent position
     if ServoX_Trigger: #If the servo trigger is true, set it to open position
         servoX.Open()
