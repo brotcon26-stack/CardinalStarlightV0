@@ -13,7 +13,7 @@ import LED
 import Servo
 from machine import Pin, PWM
 
-GroundTest = False #sets whether to ground test or not. If true, this replaces real data with replayed data from a file
+GroundTest = True #sets whether to ground test or not. If true, this replaces real data with replayed data from a file
 Slowmode = False #If we are in ground test mode, this can also be enabled. This delays 10 seconds after each loop and prints some of the data
 slowmodeDelay = 0.2 #Delay time for slowmode in seconds
 
@@ -382,7 +382,7 @@ while True:
     #if Launched:
         #error
     
-    dataLog.close()
+    #dataLog.close()
 
 #Final datalogging to print some important info from flight
 
