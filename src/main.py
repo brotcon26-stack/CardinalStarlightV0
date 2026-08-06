@@ -262,7 +262,7 @@ while True:
         FrameData = FrameData.replace("(","")
         FrameData = FrameData.replace(")","")
         dataLog.write(FrameData)
-        dataLog.flush() #This flushes the data to the file so we don't lose it if the board crashes or loses power
+        #dataLog.flush() #This flushes the data to the file so we don't lose it if the board crashes or loses power
       
     #Here are some test bits for orientation measurment (very questionable)
     #frameTime = Time - prevTime
