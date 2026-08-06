@@ -14,7 +14,6 @@ import Servo
 from machine import Pin, PWM
 
 import gc
-gc.disable()
 
 GroundTest = True #sets whether to ground test or not. If true, this replaces real data with replayed data from a file
 Slowmode = False #If we are in ground test mode, this can also be enabled. This delays 10 seconds after each loop and prints some of the data
@@ -215,6 +214,9 @@ if usbConnected:
 #We leave it open for the whole flight and flush occasionally for loop timing
 dataLog = open(dataTitle,"a")
 
+DATA_FLUSH_INTERVAL = 4 #Loops between flushes and garbage collection
+flushCounter = 0
+
 #Main flight loop
 while True:
     
@@ -265,7 +267,11 @@ while True:
         FrameData = FrameData.replace("(","")
         FrameData = FrameData.replace(")","")
         dataLog.write(FrameData)
-        #dataLog.flush() #This flushes the data to the file so we don't lose it if the board crashes or loses power
+        flushCounter += 1
+        if flushCounter >= DATA_FLUSH_INTERVAL:
+            dataLog.flush()
+            gc.collect()
+            flushCounter = 0
       
     #Here are some test bits for orientation measurment (very questionable)
     #frameTime = Time - prevTime
