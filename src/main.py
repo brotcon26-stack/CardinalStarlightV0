@@ -13,6 +13,8 @@ import LED
 import Servo
 from machine import Pin, PWM
 
+import gc
+
 GroundTest = False #sets whether to ground test or not. If true, this replaces real data with replayed data from a file
 Slowmode = False #If we are in ground test mode, this can also be enabled. This delays 10 seconds after each loop and prints some of the data
 slowmodeDelay = 0.2 #Delay time for slowmode in seconds
@@ -208,6 +210,13 @@ usbConnected   = (machine.mem32[SIE_STATUS_REG] & (SIE_CONNECTED | SIE_SUSPENDED
 if usbConnected:
     whiteLED.Blink(3,1)
 
+#Opening the datalog file
+#We leave it open for the whole flight and flush occasionally for loop timing
+dataLog = open(dataTitle,"a")
+
+DATA_FLUSH_INTERVAL = 4 #Loops between flushes and garbage collection
+flushCounter = 0
+
 #Main flight loop
 while True:
     
@@ -257,9 +266,12 @@ while True:
         FrameData = str(Time)+","+str(Altitude)+","+str(RawAltitude)+","+str(pressure)+","+str(temperature)+","+str(IMUData)+","+str(MaxAltitude)+","+str(ApogeeCounter)+","+str(Event)+","+str(ServoX_Trigger)+","+str(ServoY_Trigger)+","+str(errorLog)+"\n"
         FrameData = FrameData.replace("(","")
         FrameData = FrameData.replace(")","")
-        with open(dataTitle, 'a') as dataLog:
-            dataLog.write(FrameData)
-        
+        dataLog.write(FrameData)
+        flushCounter += 1
+        if flushCounter >= DATA_FLUSH_INTERVAL:
+            dataLog.flush()
+            gc.collect()
+            flushCounter = 0
       
     #Here are some test bits for orientation measurment (very questionable)
     #frameTime = Time - prevTime
@@ -379,7 +391,7 @@ while True:
     #if Launched:
         #error
     
-    dataLog.close()
+    #dataLog.close()
 
 #Final datalogging to print some important info from flight
 
