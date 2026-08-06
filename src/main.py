@@ -208,6 +208,10 @@ usbConnected   = (machine.mem32[SIE_STATUS_REG] & (SIE_CONNECTED | SIE_SUSPENDED
 if usbConnected:
     whiteLED.Blink(3,1)
 
+#Opening the datalog file
+#We leave it open for the whole flight and flush occasionally for loop timing
+dataLog = open(dataTitle,"a")
+
 #Main flight loop
 while True:
     
@@ -257,9 +261,8 @@ while True:
         FrameData = str(Time)+","+str(Altitude)+","+str(RawAltitude)+","+str(pressure)+","+str(temperature)+","+str(IMUData)+","+str(MaxAltitude)+","+str(ApogeeCounter)+","+str(Event)+","+str(ServoX_Trigger)+","+str(ServoY_Trigger)+","+str(errorLog)+"\n"
         FrameData = FrameData.replace("(","")
         FrameData = FrameData.replace(")","")
-        with open(dataTitle, 'a') as dataLog:
-            dataLog.write(FrameData)
-        
+        dataLog.write(FrameData)
+        dataLog.flush() #This flushes the data to the file so we don't lose it if the board crashes or loses power
       
     #Here are some test bits for orientation measurment (very questionable)
     #frameTime = Time - prevTime
