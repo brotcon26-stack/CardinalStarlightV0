@@ -17,7 +17,7 @@ import gc
 
 GroundTest = True #sets whether to ground test or not. If true, this replaces real data with replayed data from a file
 Slowmode = True #If we are in ground test mode, this can also be enabled. This delays 10 seconds after each loop and prints some of the data
-slowmodeDelay = 0 #Delay time for slowmode in seconds
+slowmodeDelay = 1 #Delay time for slowmode in seconds
 
 def getAltitude(pressure):
     return (145366.45 * (1.0 - pow(pressure / 1013.25, 0.190284))) # returns altitude in feet
