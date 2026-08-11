@@ -1,0 +1,1 @@
+mpremote rm main.py && mpremote cp src/main.py : && mpremote
