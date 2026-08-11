@@ -117,7 +117,7 @@ groundAltitude = groundCalc/cycles
 print("Ground Altitude = "+str(groundAltitude))
 
 #Event settings - timout and triggerAltitude can be set, so we set them here
-timoutTime = 675 #Saved in milliseconds
+timoutTime = 200 #Saved in milliseconds
 
 timout2Time = 1500
 
