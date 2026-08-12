@@ -1,0 +1,11 @@
+----GROUND TEST MODE----
+Timeout Time = 250
+Trigger Altitude = 30
+ Max Altitude:83.5459
+Launch Time:14324
+Burnout Time:130
+ApogeeTime:615
+Landing Time:1266
+Actual Timeout Time: 316
+Altitude Trigger Time :1052
+Actual timout 2 time: 1557

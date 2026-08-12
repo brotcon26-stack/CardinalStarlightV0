@@ -1,0 +1,1 @@
+time_launch_ms,filtered_altitude_ft,unfiltered_altitude_ft,pressure,temperature,acceleration_x_g,acceleration_y_g,acceleration_z_g,gyro_x_rate,gyro_y_rate,gyro_z_rate,max_altitude_ft,apogee_counter,event#,servo_x_state,servo_y_state,error_flag 
